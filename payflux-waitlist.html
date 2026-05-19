@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PayFlux — Anti-Calote para Designers Freelancers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Satoshi:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #080B08;
+  --surface: #0F130F;
+  --surface2: #141A14;
+  --border: rgba(255,255,255,0.07);
+  --green: #1AE05A;
+  --green-dim: rgba(26,224,90,0.12);
+  --green-glow: rgba(26,224,90,0.35);
+  --text: #F2F5F2;
+  --muted: #7A8A7A;
+  --muted2: #4A5A4A;
+  --danger: #FF5A3C;
+  --r: 14px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Satoshi', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ─── NOISE TEXTURE ─── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.6;
+}
+
+/* ─── PAGES ─── */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ─── NAV ─── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 50;
+  padding: 20px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  background: rgba(8,11,8,0.85);
+  backdrop-filter: blur(20px);
+}
+.logo {
+  font-family: 'Satoshi', sans-serif;
+  font-weight: 900;
+  font-size: 20px;
+  letter-spacing: -0.04em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.logo-icon {
+  width: 28px; height: 28px;
+  background: var(--green);
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+}
+.logo span { color: var(--green); }
+.nav-tag {
+  font-size: 12px;
+  padding: 5px 12px;
+  border: 1px solid rgba(26,224,90,0.3);
+  border-radius: 20px;
+  color: var(--green);
+  background: var(--green-dim);
+  font-weight: 500;
+  animation: fadepulse 3s infinite;
+}
+@keyframes fadepulse {
+  0%,100% { opacity:1; }
+  50% { opacity:0.6; }
+}
+
+/* ─── HERO ─── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120px 24px 80px;
+  text-align: center;
+  position: relative;
+}
+
+/* radial glow behind headline */
+.hero::before {
+  content: '';
+  position: absolute;
+  width: 700px; height: 700px;
+  background: radial-gradient(circle, rgba(26,224,90,0.07) 0%, transparent 65%);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -52%);
+  pointer-events: none;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgba(26,224,90,0.25);
+  background: var(--green-dim);
+  color: var(--green);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 7px 16px;
+  border-radius: 30px;
+  margin-bottom: 36px;
+  animation: slidedown 0.6s ease both;
+}
+.badge-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: blink 1.5s infinite;
+}
+@keyframes blink {
+  0%,100% { opacity:1; transform:scale(1); }
+  50% { opacity:0.4; transform:scale(0.7); }
+}
+@keyframes slidedown {
+  from { opacity:0; transform:translateY(-16px); }
+  to { opacity:1; transform:translateY(0); }
+}
+
+.hero-h1 {
+  font-family: 'Instrument Serif', serif;
+  font-size: clamp(44px, 7vw, 80px);
+  font-weight: 400;
+  line-height: 1.07;
+  letter-spacing: -0.02em;
+  max-width: 780px;
+  margin-bottom: 24px;
+  animation: slideup 0.7s 0.1s ease both;
+}
+.hero-h1 em {
+  font-style: italic;
+  color: var(--green);
+}
+
+@keyframes slideup {
+  from { opacity:0; transform:translateY(24px); }
+  to { opacity:1; transform:translateY(0); }
+}
+
+.hero-sub {
+  font-size: clamp(15px,2vw,18px);
+  color: var(--muted);
+  line-height: 1.7;
+  max-width: 560px;
+  margin-bottom: 16px;
+  animation: slideup 0.7s 0.2s ease both;
+}
+
+.hero-spots {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--green);
+  background: var(--green-dim);
+  border: 1px solid rgba(26,224,90,0.2);
+  padding: 6px 14px;
+  border-radius: 8px;
+  margin-bottom: 40px;
+  animation: slideup 0.7s 0.25s ease both;
+  letter-spacing: 0.01em;
+}
+
+/* ─── CTA BUTTON ─── */
+.btn-cta {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--green);
+  color: #060906;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  padding: 17px 36px;
+  border-radius: 50px;
+  border: none;
+  cursor: pointer;
+  letter-spacing: -0.01em;
+  transition: transform 0.15s, box-shadow 0.15s;
+  animation: slideup 0.7s 0.35s ease both, ctapulse 2.5s 1s infinite;
+  text-decoration: none;
+  z-index: 1;
+}
+.btn-cta::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 54px;
+  background: transparent;
+  border: 2px solid var(--green);
+  opacity: 0;
+  animation: ringpulse 2.5s 1s infinite;
+}
+@keyframes ringpulse {
+  0% { opacity:0.8; transform:scale(1); }
+  100% { opacity:0; transform:scale(1.25); }
+}
+@keyframes ctapulse {
+  0%,100% { box-shadow: 0 0 0 0 var(--green-glow), 0 8px 32px rgba(26,224,90,0.25); }
+  50% { box-shadow: 0 0 0 10px transparent, 0 8px 48px rgba(26,224,90,0.4); }
+}
+.btn-cta:hover { transform: translateY(-2px); box-shadow: 0 12px 48px rgba(26,224,90,0.5); }
+.btn-cta:active { transform: translateY(0); }
+
+.btn-arrow { font-size: 20px; transition: transform 0.2s; }
+.btn-cta:hover .btn-arrow { transform: translateX(4px); }
+
+/* ─── STATS STRIP ─── */
+.stats-strip {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  overflow: hidden;
+  margin: 64px auto 0;
+  max-width: 680px;
+  width: 100%;
+  animation: slideup 0.7s 0.5s ease both;
+}
+.stat-item {
+  flex: 1;
+  padding: 22px 20px;
+  text-align: center;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+}
+.stat-item:last-child { border-right: none; }
+.stat-num {
+  font-family: 'Instrument Serif', serif;
+  font-size: 34px;
+  color: var(--green);
+  display: block;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.stat-label { font-size: 12px; color: var(--muted); line-height: 1.4; }
+
+/* ─── FEATURES ─── */
+.features-section {
+  padding: 80px 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.section-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--green);
+  margin-bottom: 12px;
+}
+.section-h2 {
+  font-family: 'Instrument Serif', serif;
+  font-size: clamp(30px, 4vw, 48px);
+  font-weight: 400;
+  line-height: 1.1;
+  margin-bottom: 12px;
+}
+.section-sub { font-size: 16px; color: var(--muted); margin-bottom: 48px; max-width: 500px; }
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  overflow: hidden;
+}
+.feat-card {
+  background: var(--surface);
+  padding: 32px 28px;
+  transition: background 0.2s;
+  cursor: default;
+}
+.feat-card:hover { background: var(--surface2); }
+.feat-icon {
+  width: 44px; height: 44px;
+  border-radius: 10px;
+  background: var(--green-dim);
+  border: 1px solid rgba(26,224,90,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+.feat-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+.feat-desc { font-size: 14px; color: var(--muted); line-height: 1.65; }
+
+/* ─── CTA SECTION ─── */
+.cta-section {
+  padding: 48px 24px 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cta-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 64px 48px;
+  text-align: center;
+  max-width: 680px;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+.cta-box::before {
+  content: '';
+  position: absolute;
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(26,224,90,0.06) 0%, transparent 70%);
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  pointer-events: none;
+}
+.cta-box-h2 {
+  font-family: 'Instrument Serif', serif;
+  font-size: clamp(28px,4vw,42px);
+  font-weight: 400;
+  margin-bottom: 16px;
+  line-height: 1.1;
+}
+.cta-box-sub { font-size: 16px; color: var(--muted); margin-bottom: 36px; line-height: 1.6; }
+
+/* ─── FOOTER ─── */
+footer {
+  padding: 28px 40px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--muted2);
+}
+
+/* ─── MODAL OVERLAY ─── */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(4,7,4,0.92);
+  backdrop-filter: blur(12px);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 40px;
+  width: 100%;
+  max-width: 560px;
+  max-height: 92vh;
+  overflow-y: auto;
+  position: relative;
+  animation: modalin 0.3s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+@keyframes modalin {
+  from { opacity:0; transform:scale(0.92) translateY(20px); }
+  to { opacity:1; transform:scale(1) translateY(0); }
+}
+.modal-close {
+  position: absolute;
+  top: 18px; right: 18px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+}
+.modal-close:hover { color: var(--text); border-color: var(--muted); }
+
+.modal-step-indicator {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 28px;
+}
+.msi-dot {
+  height: 3px;
+  border-radius: 2px;
+  flex: 1;
+  background: var(--border);
+  transition: background 0.3s;
+}
+.msi-dot.active { background: var(--green); }
+
+.modal-title {
+  font-family: 'Instrument Serif', serif;
+  font-size: 26px;
+  font-weight: 400;
+  margin-bottom: 6px;
+  line-height: 1.2;
+}
+.modal-sub { font-size: 14px; color: var(--muted); margin-bottom: 28px; line-height: 1.5; }
+
+/* FORM */
+.form-group { margin-bottom: 18px; }
+.form-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 7px;
+}
+.form-input, .form-select, .form-textarea {
+  width: 100%;
+  background: #0A0E0A;
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 15px;
+  padding: 13px 16px;
+  border-radius: 10px;
+  font-family: 'Satoshi', sans-serif;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  border-color: rgba(26,224,90,0.5);
+  box-shadow: 0 0 0 3px rgba(26,224,90,0.08);
+}
+.form-input::placeholder, .form-textarea::placeholder { color: var(--muted2); }
+.form-textarea { resize: vertical; min-height: 96px; }
+.form-select { appearance: none; cursor: pointer; }
+option { background: #0F130F; }
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+.btn-submit {
+  width: 100%;
+  background: var(--green);
+  color: #060906;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 15px;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: transform 0.15s, box-shadow 0.15s;
+  animation: ctapulse 2.5s infinite;
+  letter-spacing: -0.01em;
+}
+.btn-submit:hover { transform: translateY(-1px); box-shadow: 0 8px 32px rgba(26,224,90,0.4); }
+.btn-submit:active { transform: none; }
+
+.privacy-note { font-size: 12px; color: var(--muted2); text-align: center; margin-top: 12px; }
+
+/* ─── THANK YOU PAGE ─── */
+#page-thankyou {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+  text-align: center;
+  position: relative;
+}
+#page-thankyou::before {
+  content: '';
+  position: absolute;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(26,224,90,0.08) 0%, transparent 65%);
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  pointer-events: none;
+}
+.ty-icon {
+  width: 72px; height: 72px;
+  background: var(--green-dim);
+  border: 2px solid rgba(26,224,90,0.3);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32px;
+  margin: 0 auto 28px;
+  animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+@keyframes popIn {
+  from { opacity:0; transform:scale(0.4); }
+  to { opacity:1; transform:scale(1); }
+}
+.ty-h1 {
+  font-family: 'Instrument Serif', serif;
+  font-size: clamp(30px,5vw,52px);
+  font-weight: 400;
+  line-height: 1.1;
+  margin-bottom: 18px;
+  animation: slideup 0.6s 0.15s ease both;
+}
+.ty-sub {
+  font-size: 16px;
+  color: var(--muted);
+  max-width: 460px;
+  line-height: 1.7;
+  margin-bottom: 40px;
+  animation: slideup 0.6s 0.25s ease both;
+}
+.ty-whatsapp {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: #25D366;
+  color: #fff;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  padding: 17px 36px;
+  border-radius: 50px;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.15s, box-shadow 0.15s;
+  animation: slideup 0.6s 0.35s ease both, ctapulse 2.5s 1s infinite;
+  letter-spacing: -0.01em;
+}
+.ty-whatsapp:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(37,211,102,0.4); }
+.ty-note {
+  margin-top: 24px;
+  font-size: 13px;
+  color: var(--muted2);
+  animation: slideup 0.6s 0.45s ease both;
+}
+
+/* ─── LEADS TABLE ─── */
+.leads-section {
+  padding: 40px;
+  max-width: 900px;
+  margin: 0 auto;
+  animation: slideup 0.5s ease both;
+}
+.leads-section h2 {
+  font-family: 'Instrument Serif', serif;
+  font-size: 28px;
+  margin-bottom: 6px;
+}
+.leads-meta { font-size: 14px; color: var(--muted); margin-bottom: 24px; }
+.leads-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.leads-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--green-dim);
+  border: 1px solid rgba(26,224,90,0.2);
+  color: var(--green);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 20px;
+}
+
+.leads-table-wrap { overflow-x: auto; border-radius: var(--r); border: 1px solid var(--border); }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+thead tr { background: var(--surface2); }
+th {
+  text-align: left;
+  padding: 13px 16px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+td {
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  vertical-align: top;
+}
+tr:last-child td { border-bottom: none; }
+tbody tr { background: var(--surface); transition: background 0.15s; }
+tbody tr:hover { background: var(--surface2); }
+.td-email { color: var(--muted); font-size: 13px; }
+.td-modelo {
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.td-modelo.taxa { background: rgba(26,224,90,0.1); color: var(--green); }
+.td-modelo.pct { background: rgba(245,166,35,0.1); color: #F5A623; }
+.td-calote { max-width: 220px; font-size: 13px; color: var(--muted); line-height: 1.4; }
+.td-link { font-size: 12px; color: var(--green); word-break: break-all; }
+.td-time { font-size: 12px; color: var(--muted2); white-space: nowrap; }
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.btn-export {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: 'Satoshi', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-export:hover { border-color: var(--green); color: var(--green); }
+.btn-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 14px;
+  cursor: pointer;
+  margin-bottom: 24px;
+  background: none;
+  border: none;
+  font-family: 'Satoshi', sans-serif;
+  text-decoration: none;
+}
+.btn-back-link:hover { color: var(--text); }
+
+/* ─── HIDDEN ADMIN ─── */
+.admin-link {
+  position: fixed;
+  bottom: 16px;
+  right: 20px;
+  font-size: 11px;
+  color: var(--muted2);
+  cursor: pointer;
+  z-index: 10;
+  background: none;
+  border: none;
+  font-family: 'Satoshi', sans-serif;
+}
+.admin-link:hover { color: var(--muted); }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 720px) {
+  nav { padding: 16px 20px; }
+  .features-grid { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+  .cta-box { padding: 40px 24px; }
+  .stats-strip { flex-direction: column; }
+  .stat-item { border-right: none; border-bottom: 1px solid var(--border); }
+  .stat-item:last-child { border-bottom: none; }
+  footer { flex-direction: column; gap: 8px; text-align: center; }
+  .modal { padding: 28px 22px; }
+  .leads-section { padding: 24px 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════ LANDING PAGE ══════════════ -->
+<div id="page-landing" class="page active">
+
+  <nav>
+    <div class="logo">
+      <div class="logo-icon">⚡</div>
+      Pay<span>Flux</span>
+    </div>
+    <div class="nav-tag">🔴 Vagas limitadas — 30 designers</div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      Lista de espera aberta · Beta exclusivo
+    </div>
+    <h1 class="hero-h1">
+      Trabalhe com a certeza<br>
+      absoluta de que vai <em>receber.</em>
+    </h1>
+    <p class="hero-sub">
+      A PayFlux é a plataforma anti-calote feita sob medida para designers freelancers. Proteja seus projetos com escrow, contrato automático e gestão de etapas — o cliente paga antes de você começar.
+    </p>
+    <div class="hero-spots">🎯 Selecionando apenas 30 designers para o grupo piloto</div>
+    <button class="btn-cta" onclick="openModal()">
+      Quero estar entre os 30 Designers
+      <span class="btn-arrow">→</span>
+    </button>
+
+    <div class="stats-strip">
+      <div class="stat-item">
+        <span class="stat-num">67%</span>
+        <span class="stat-label">dos freelancers já tomaram calote de cliente</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">82%</span>
+        <span class="stat-label">querem garantia de pagamento antes de entregar</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">R$ 0</span>
+        <span class="stat-label">de inadimplência com escrow ativo na plataforma</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features-section">
+    <div class="section-eyebrow">Tudo que você precisa</div>
+    <h2 class="section-h2">Para receber com segurança.</h2>
+    <p class="section-sub">Um kit completo para proteger designers freelancers contra inadimplência.</p>
+
+    <div class="features-grid">
+      <div class="feat-card">
+        <div class="feat-icon">🔒</div>
+        <div class="feat-title">Proteção Escrow</div>
+        <div class="feat-desc">Os fundos ficam retidos com segurança até a aprovação. Nunca mais corra atrás de pagamentos.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">📄</div>
+        <div class="feat-title">Contratos Automáticos</div>
+        <div class="feat-desc">Acordos legais gerados instantaneamente. Clientes assinam digitalmente antes de você começar.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">👁️</div>
+        <div class="feat-title">Proteção de Arquivos</div>
+        <div class="feat-desc">Prévias com marca d'água até o pagamento total. Arquivos em alta são liberados automaticamente.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">💳</div>
+        <div class="feat-title">Pagamentos Inteligentes</div>
+        <div class="feat-desc">Pagamentos divididos com cálculo automático de taxa da plataforma. Transparente de ponta a ponta.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">⚡</div>
+        <div class="feat-title">Calculadora de Preços</div>
+        <div class="feat-desc">Saiba quanto cobrar. Calcule sua taxa ideal com base em despesas e metas de renda mensal.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">⚖️</div>
+        <div class="feat-title">Controle de Milestones</div>
+        <div class="feat-desc">50/50 ou 100% antecipado — estruturas flexíveis de pagamento para cada tipo de projeto.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section class="cta-section">
+    <div class="cta-box">
+      <h2 class="cta-box-h2">Pare de perder dinheiro<br>com trabalho não pago.</h2>
+      <p class="cta-box-sub">Junte-se aos designers que vão usar a PayFlux para proteger sua renda e simplificar pagamentos.</p>
+      <button class="btn-cta" onclick="openModal()">
+        Começar Grátis
+        <span class="btn-arrow">→</span>
+      </button>
+    </div>
+  </section>
+
+  <footer>
+    <div class="logo" style="font-size:16px;">
+      <div class="logo-icon" style="width:22px;height:22px;font-size:11px;">⚡</div>
+      Pay<span>Flux</span>
+    </div>
+    <div>© 2026 PayFlux. Proteja seu trabalho criativo.</div>
+  </footer>
+
+</div>
+
+<!-- ══════════════ THANK YOU PAGE ══════════════ -->
+<div id="page-thankyou" class="page">
+  <div class="ty-icon">✅</div>
+  <h1 class="ty-h1">Inscrição recebida!<br><em>Você está na lista.</em></h1>
+  <p class="ty-sub">
+    As vagas para o grupo piloto são limitadas. Para garantir sua prioridade e participar do desenho das ferramentas da PayFlux, entre agora no nosso grupo fechado de fundadores.
+  </p>
+  <a class="ty-whatsapp" href="https://chat.whatsapp.com/InD6IXFdBUw98WfhkBb42z" target="_blank" rel="noopener">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    Entrar no Grupo dos Fundadores
+  </a>
+  <p class="ty-note">Grupo exclusivo · Acesso antecipado à plataforma · Você ajuda a moldar o produto</p>
+</div>
+
+<!-- ══════════════ ADMIN / LEADS ══════════════ -->
+<div id="page-admin" class="page">
+  <div style="min-height:100vh;background:var(--bg);">
+    <nav>
+      <div class="logo">
+        <div class="logo-icon">⚡</div>
+        Pay<span>Flux</span>
+      </div>
+      <div style="font-size:13px;color:var(--muted);">Painel de Leads</div>
+    </nav>
+    <div class="leads-section" style="padding-top:100px;">
+      <button class="btn-back-link" onclick="showPage('page-landing')">← Voltar para a LP</button>
+      <div class="leads-header-row">
+        <div>
+          <h2>Leads capturados</h2>
+          <p class="leads-meta">Designers que se inscreveram na lista de espera PayFlux</p>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;">
+          <span class="leads-count" id="leads-count-badge">● 0 leads</span>
+          <button class="btn-export" onclick="exportCSV()">⬇ Exportar CSV</button>
+        </div>
+      </div>
+      <div class="leads-table-wrap">
+        <table id="leads-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nome</th>
+              <th>E-mail</th>
+              <th>Portfólio / LinkedIn</th>
+              <th>Maior prejuízo</th>
+              <th>Modelo preferido</th>
+              <th>Data</th>
+            </tr>
+          </thead>
+          <tbody id="leads-tbody">
+            <tr><td colspan="7" class="empty-state">Nenhum lead ainda. Compartilhe a página e aguarde! 🚀</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ FORM MODAL ══════════════ -->
+<div class="modal-overlay" id="form-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+
+    <div class="modal-step-indicator">
+      <div class="msi-dot active" id="dot-1"></div>
+      <div class="msi-dot" id="dot-2"></div>
+      <div class="msi-dot" id="dot-3"></div>
+      <div class="msi-dot" id="dot-4"></div>
+    </div>
+
+    <!-- STEP 1 -->
+    <div id="step-1">
+      <div class="modal-title">Quase lá! 🎯</div>
+      <div class="modal-sub">Preencha seus dados para garantir sua vaga entre os 30 designers fundadores.</div>
+      <div class="form-group">
+        <label class="form-label">Nome completo *</label>
+        <input class="form-input" type="text" id="f-nome" placeholder="Seu nome completo">
+      </div>
+      <div class="form-group">
+        <label class="form-label">E-mail *</label>
+        <input class="form-input" type="email" id="f-email" placeholder="seu@email.com">
+      </div>
+      <button class="btn-submit" onclick="nextStep(2)">Continuar →</button>
+      <p class="privacy-note">🔒 Seus dados são privados e não serão compartilhados.</p>
+    </div>
+
+    <!-- STEP 2 -->
+    <div id="step-2" style="display:none;">
+      <div class="modal-title">Seu portfólio 💼</div>
+      <div class="modal-sub">Isso comprova que você é um profissional ativo. Pode ser Behance, LinkedIn, Instagram ou site.</div>
+      <div class="form-group">
+        <label class="form-label">Link do portfólio ou LinkedIn *</label>
+        <input class="form-input" type="url" id="f-portfolio" placeholder="https://behance.net/seuusuario">
+      </div>
+      <button class="btn-submit" onclick="nextStep(3)">Continuar →</button>
+    </div>
+
+    <!-- STEP 3 -->
+    <div id="step-3" style="display:none;">
+      <div class="modal-title">A dor real 💸</div>
+      <div class="modal-sub">Isso nos ajuda a entender o impacto real e construir o produto certo para você.</div>
+      <div class="form-group">
+        <label class="form-label">Qual foi o maior prejuízo financeiro que você já teve por calote de um cliente? *</label>
+        <textarea class="form-textarea" id="f-calote" placeholder="Ex: Perdi R$ 3.000 em um projeto de identidade visual que o cliente aprovou e depois sumiu..."></textarea>
+      </div>
+      <button class="btn-submit" onclick="nextStep(4)">Continuar →</button>
+    </div>
+
+    <!-- STEP 4 -->
+    <div id="step-4" style="display:none;">
+      <div class="modal-title">Última pergunta 🎉</div>
+      <div class="modal-sub">Sua resposta ajuda a moldar como a plataforma vai cobrar. Sua opinião conta de verdade.</div>
+      <div class="form-group">
+        <label class="form-label">Para garantir o recebimento do cliente, você prefere pagar a PayFlux com: *</label>
+        <select class="form-select" id="f-modelo">
+          <option value="">Selecione sua preferência...</option>
+          <option value="Taxa fixa por projeto (ex: R$20,00)">Taxa fixa por projeto — ex: R$ 20,00</option>
+          <option value="Porcentagem do valor do projeto (ex: 10%)">Porcentagem do valor — ex: 10% por projeto</option>
+          <option value="Assinatura mensal fixa">Assinatura mensal fixa</option>
+        </select>
+      </div>
+      <button class="btn-submit" onclick="submitForm()">✅ Garantir minha vaga agora</button>
+      <p class="privacy-note">🔒 Seus dados são privados e não serão compartilhados.</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- HIDDEN ADMIN BUTTON -->
+<button class="admin-link" onclick="showPage('page-admin'); renderLeads()">⚙</button>
+
+<script>
+// ─── STORAGE ───
+const LEADS_KEY = 'payflux_leads_v1';
+
+function getLeads() {
+  try { return JSON.parse(localStorage.getItem(LEADS_KEY)) || []; }
+  catch { return []; }
+}
+function saveLead(lead) {
+  const leads = getLeads();
+  leads.push(lead);
+  localStorage.setItem(LEADS_KEY, JSON.stringify(leads));
+}
+
+// ─── PAGES ───
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// ─── MODAL ───
+function openModal() {
+  document.getElementById('form-modal').classList.add('open');
+  goToStep(1);
+}
+function closeModal() {
+  document.getElementById('form-modal').classList.remove('open');
+}
+document.getElementById('form-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// ─── STEPS ───
+let currentStep = 1;
+function goToStep(n) {
+  for (let i = 1; i <= 4; i++) {
+    document.getElementById('step-' + i).style.display = (i === n) ? 'block' : 'none';
+    const dot = document.getElementById('dot-' + i);
+    dot.classList.toggle('active', i <= n);
+  }
+  currentStep = n;
+}
+
+function nextStep(n) {
+  if (!validateStep(currentStep)) return;
+  goToStep(n);
+}
+
+function validateStep(n) {
+  const fields = {
+    1: ['f-nome', 'f-email'],
+    2: ['f-portfolio'],
+    3: ['f-calote'],
+    4: ['f-modelo']
+  };
+  const toCheck = fields[n] || [];
+  let ok = true;
+  toCheck.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el.value.trim()) {
+      el.style.borderColor = '#FF5A3C';
+      el.focus();
+      setTimeout(() => el.style.borderColor = '', 2000);
+      ok = false;
+    }
+  });
+  // Extra: email validation
+  if (n === 1 && ok) {
+    const email = document.getElementById('f-email').value;
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      const el = document.getElementById('f-email');
+      el.style.borderColor = '#FF5A3C';
+      setTimeout(() => el.style.borderColor = '', 2000);
+      return false;
+    }
+  }
+  return ok;
+}
+
+function submitForm() {
+  if (!validateStep(4)) return;
+  const lead = {
+    nome: document.getElementById('f-nome').value.trim(),
+    email: document.getElementById('f-email').value.trim(),
+    portfolio: document.getElementById('f-portfolio').value.trim(),
+    calote: document.getElementById('f-calote').value.trim(),
+    modelo: document.getElementById('f-modelo').value,
+    data: new Date().toLocaleString('pt-BR')
+  };
+  saveLead(lead);
+  closeModal();
+  showPage('page-thankyou');
+}
+
+// ─── RENDER LEADS TABLE ───
+function renderLeads() {
+  const leads = getLeads();
+  const tbody = document.getElementById('leads-tbody');
+  const badge = document.getElementById('leads-count-badge');
+  badge.textContent = '● ' + leads.length + ' lead' + (leads.length !== 1 ? 's' : '');
+
+  if (leads.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="7" class="empty-state">Nenhum lead ainda. Compartilhe a página! 🚀</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = leads.map((l, i) => `
+    <tr>
+      <td style="color:var(--muted2);font-size:12px;">${i + 1}</td>
+      <td><strong>${esc(l.nome)}</strong></td>
+      <td class="td-email">${esc(l.email)}</td>
+      <td class="td-link"><a href="${esc(l.portfolio)}" target="_blank" style="color:var(--green);text-decoration:none;">${esc(l.portfolio.replace('https://','').slice(0,30))}…</a></td>
+      <td class="td-calote">${esc(l.calote)}</td>
+      <td><span class="td-modelo ${l.modelo.includes('fixa') || l.modelo.includes('Taxa') ? 'taxa' : 'pct'}">${esc(l.modelo.split('(')[0].trim())}</span></td>
+      <td class="td-time">${esc(l.data)}</td>
+    </tr>
+  `).join('');
+}
+
+function esc(str) {
+  return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ─── EXPORT CSV ───
+function exportCSV() {
+  const leads = getLeads();
+  if (!leads.length) { alert('Nenhum lead para exportar ainda.'); return; }
+  const headers = ['#', 'Nome', 'E-mail', 'Portfólio/LinkedIn', 'Maior Prejuízo', 'Modelo Preferido', 'Data'];
+  const rows = leads.map((l, i) => [
+    i + 1, l.nome, l.email, l.portfolio, l.calote, l.modelo, l.data
+  ].map(v => '"' + String(v).replace(/"/g,'""') + '"'));
+  const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'payflux_leads.csv'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ─── KEYBOARD ───
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+});
+</script>
+
+</body>
+</html>
