@@ -383,20 +383,32 @@ tbody tr:hover{background:var(--surface2);}
 <button class="admin-link" onclick="enterAdmin()">⚙</button>
 
 <script>
-// ── STORAGE (shared=true → persiste para todos os visitantes) ──
+// ── STORAGE (Corrigido para funcionar no ambiente de testes e na Vercel de produção) ──
 const LEADS_KEY = 'payflux_leads_v3';
 
 async function getAllLeads() {
   try {
-    const result = await window.storage.get(LEADS_KEY, true);
-    return result ? JSON.parse(result.value) : [];
+    // Se estiver no ambiente com window.storage personalizado
+    if (window.storage && typeof window.storage.get === 'function') {
+      const result = await window.storage.get(LEADS_KEY, true);
+      return result ? JSON.parse(result.value) : [];
+    }
+    // Fallback seguro para navegadores normais / Vercel
+    const local = localStorage.getItem(LEADS_KEY);
+    return local ? JSON.parse(local) : [];
   } catch { return []; }
 }
 
 async function addLead(lead) {
   const leads = await getAllLeads();
   leads.push(lead);
-  await window.storage.set(LEADS_KEY, JSON.stringify(leads), true);
+  try {
+    if (window.storage && typeof window.storage.set === 'function') {
+      await window.storage.set(LEADS_KEY, JSON.stringify(leads), true);
+    } else {
+      localStorage.setItem(LEADS_KEY, JSON.stringify(leads));
+    }
+  } catch(e) { console.error("Erro ao salvar localmente:", e); }
   return leads;
 }
 
@@ -428,7 +440,7 @@ function goToStep(n) {
   currentStep = n;
 }
 
-// Função auxiliar simples para os alertas visuais (Toast)
+// Função de avisos visuais na tela
 function showToast(message) {
   const toast = document.getElementById('toast');
   if(toast) {
@@ -476,7 +488,7 @@ async function submitForm() {
   };
 
   try {
-    // Envio assíncrono para o Formspree
+    // 1. Envia os dados para o Formspree
     const response = await fetch('https://formspree.io/f/xykvkwea', {
       method: 'POST',
       headers: {
@@ -487,15 +499,23 @@ async function submitForm() {
     });
 
     if (!response.ok) {
-      throw new Error('Falha ao enviar dados ao servidor.');
+      throw new Error('Falha no envio do Formspree');
     }
 
-    // Salva localmente também (para o seu painel admin interno continuar funcionando)
+    // 2. Salva na lista local (com o código corrigido para Vercel)
     await addLead(lead);
     
-    closeModal();
-    showPage('page-thankyou');
+    // 3. Exibe o aviso de sucesso na tela
+    showToast('Inscrição enviada com sucesso! 🎉');
+    
+    // 4. Aguarda 1 segundo para a transição ficar suave e vai para a tela do Whatsapp
+    setTimeout(() => {
+      closeModal();
+      showPage('page-thankyou');
+    }, 1000);
+
   } catch(err) {
+    console.error(err);
     showToast('Erro ao enviar inscrição. Tente novamente.');
     btn.disabled = false;
     btn.textContent = '✅ Garantir minha vaga agora';
@@ -516,5 +536,3 @@ async function renderLeads() {
   if (typeof renderTable === 'function') renderTable(allLeads, currentFilter);
 }
 </script>
-</body>
-</html>
