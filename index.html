@@ -25,9 +25,9 @@ html{scroll-behavior:smooth;}
 body{font-family:'Satoshi',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
 body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:0.6;}
 
-/* PAGES */
-.page{display:none;}
-.page.active{display:block;}
+/* CONTROLE DE PÁGINAS */
+.page { display: none; }
+.page.active { display: block; }
 
 /* NAV */
 nav{position:fixed;top:0;left:0;right:0;z-index:50;padding:20px 40px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);background:rgba(8,11,8,0.85);backdrop-filter:blur(20px);}
@@ -40,21 +40,285 @@ nav{position:fixed;top:0;left:0;right:0;z-index:50;padding:20px 40px;display:fle
 /* HERO */
 .hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:120px 24px 80px;text-align:center;position:relative;}
 .hero::before{content:'';position:absolute;width:700px;height:700px;background:radial-gradient(circle,rgba(26,224,90,0.07) 0%,transparent 65%);top:50%;left:50%;transform:translate(-50%,-52%);pointer-events:none;}
-
 .hero-badge{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(26,224,90,0.25);background:var(--green-dim);color:var(--green);font-size:13px;font-weight:500;padding:7px 16px;border-radius:30px;margin-bottom:36px;animation:slidedown 0.6s ease both;}
 .badge-dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:blink 1.5s infinite;}
 @keyframes blink{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.4;transform:scale(0.7);}}
 @keyframes slidedown{from{opacity:0;transform:translateY(-16px);}to{opacity:1;transform:translateY(0);}}
-
 .hero-h1{font-family:'Instrument Serif',serif;font-size:clamp(44px,7vw,80px);font-weight:400;line-height:1.07;letter-spacing:-0.02em;max-width:780px;margin-bottom:24px;animation:slideup 0.7s 0.1s ease both;}
 .hero-h1 em{font-style:italic;color:var(--green);}
 @keyframes slideup{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
-
 .hero-sub{font-size:clamp(15px,2vw,18px);color:var(--muted);line-height:1.7;max-width:560px;margin-bottom:16px;animation:slideup 0.7s 0.2s ease both;}
 .hero-spots{display:inline-block;font-size:14px;font-weight:700;color:var(--green);background:var(--green-dim);border:1px solid rgba(26,224,90,0.2);padding:6px 14px;border-radius:8px;margin-bottom:40px;animation:slideup 0.7s 0.25s ease both;}
 
-/* CTA BUTTON */
+/* BOTÕES */
 .btn-cta{position:relative;display:inline-flex;align-items:center;gap:10px;background:var(--green);color:#060906;font-family:'Satoshi',sans-serif;font-size:17px;font-weight:700;padding:17px 36px;border-radius:50px;border:none;cursor:pointer;letter-spacing:-0.01em;transition:transform 0.15s,box-shadow 0.15s;animation:slideup 0.7s 0.35s ease both,ctapulse 2.5s 1s infinite;text-decoration:none;z-index:1;}
-.btn-cta::after{content:'';position:absolute;inset:-4px;border-radius:54px;background:transparent;border:2px solid var(--green);opacity:0;animation:ringpulse 2.5s 1s infinite;}
-@keyframes ringpulse{0%{opacity:0.8;transform:scale(1);}100%{opacity:0;transform:scale(1.25);}}
-@keyframes ctapulse{0%,100%{box-shadow:0 0 0 0 var(--green-glow),0 8px 32px rgba(26,224,90,0.25);}50%{box-shadow:0 0
+@keyframes ctapulse{0%,100%{box-shadow:0 0 0 0 var(--green-glow),0 8px 32px rgba(26,224,90,0.25);}50%{box-shadow:0 0 0 10px transparent,0 8px 48px rgba(26,224,90,0.4);}}
+.btn-cta:hover{transform:translateY(-2px);box-shadow:0 12px 48px rgba(26,224,90,0.5);}
+.btn-arrow{font-size:20px;transition:transform 0.2s;}
+.btn-cta:hover .btn-arrow{transform:translateX(4px);}
+
+/* STATS */
+.stats-strip{display:flex;align-items:center;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin:64px auto 0;max-width:680px;width:100%;animation:slideup 0.7s 0.5s ease both;}
+.stat-item{flex:1;padding:22px 20px;text-align:center;background:var(--surface);border-right:1px solid var(--border);}
+.stat-item:last-child{border-right:none;}
+.stat-num{font-family:'Instrument Serif',serif;font-size:34px;color:var(--green);display:block;line-height:1;margin-bottom:4px;}
+.stat-label{font-size:12px;color:var(--muted);line-height:1.4;}
+
+/* FEATURES */
+.features-section{padding:80px 24px;max-width:1100px;margin:0 auto;}
+.section-eyebrow{font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--green);margin-bottom:12px;}
+.section-h2{font-family:'Instrument Serif',serif;font-size:clamp(30px,4vw,48px);font-weight:400;line-height:1.1;margin-bottom:12px;}
+.section-sub{font-size:16px;color:var(--muted);margin-bottom:48px;max-width:500px;}
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
+.feat-card{background:var(--surface);padding:32px 28px;transition:background 0.2s;}
+.feat-card:hover{background:var(--surface2);}
+.feat-icon{width:44px;height:44px;border-radius:10px;background:var(--green-dim);border:1px solid rgba(26,224,90,0.2);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:20px;}
+.feat-title{font-size:16px;font-weight:700;margin-bottom:8px;}
+.feat-desc{font-size:14px;color:var(--muted);line-height:1.65;}
+
+/* CTA FINAL */
+.cta-section{padding:48px 24px 80px;display:flex;align-items:center;justify-content:center;}
+.cta-box{background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:64px 48px;text-align:center;max-width:680px;width:100%;position:relative;overflow:hidden;}
+.cta-box-h2{font-family:'Instrument Serif',serif;font-size:clamp(28px,4vw,42px);font-weight:400;margin-bottom:16px;line-height:1.1;}
+.cta-box-sub{font-size:16px;color:var(--muted);margin-bottom:36px;line-height:1.6;}
+
+/* FOOTER */
+footer{padding:28px 40px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;font-size:13px;color:var(--muted2);}
+
+/* MODAL OVERLAY */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(4,7,4,0.92);backdrop-filter:blur(12px);z-index:200;align-items:center;justify-content:center;padding:24px;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:40px;width:100%;max-width:560px;max-height:92vh;overflow-y:auto;position:relative;animation:modalin 0.3s cubic-bezier(0.34,1.56,0.64,1) both;}
+@keyframes modalin{from{opacity:0;transform:scale(0.92) translateY(20px);}to{opacity:1;transform:scale(1) translateY(0);}}
+.modal-close{position:absolute;top:18px;right:18px;background:var(--surface2);border:1px solid var(--border);color:var(--muted);width:32px;height:32px;border-radius:8px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+
+.msi{display:flex;gap:6px;margin-bottom:28px;}
+.msi-dot{height:3px;border-radius:2px;flex:1;background:var(--border);transition:background 0.3s;}
+.msi-dot.active{background:var(--green);}
+
+.modal-title{font-family:'Instrument Serif',serif;font-size:26px;font-weight:400;margin-bottom:6px;line-height:1.2;}
+.modal-sub{font-size:14px;color:var(--muted);margin-bottom:28px;line-height:1.5;}
+
+/* FORMULÁRIO */
+.form-group{margin-bottom:18px;}
+.form-label{display:block;font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);margin-bottom:7px;}
+.form-input,.form-select,.form-textarea{width:100%;background:#0A0E0A;border:1px solid var(--border);color:var(--text);font-size:15px;padding:13px 16px;border-radius:10px;font-family:'Satoshi',sans-serif;outline:none;}
+.form-textarea{resize:vertical;min-height:96px;}
+.btn-submit{width:100%;background:var(--green);color:#060906;font-family:'Satoshi',sans-serif;font-size:16px;font-weight:700;padding:15px;border:none;border-radius:50px;cursor:pointer;margin-top:8px;animation:ctapulse 2.5s infinite;}
+.btn-submit:disabled{opacity:0.6;cursor:not-allowed;animation:none;}
+
+/* PÁGINA DE OBRIGADO (WHATSAPP) */
+#page-thankyou{min-height:100vh;display:none;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;text-align:center;position:relative;}
+#page-thankyou.active{display:flex;}
+.ty-icon{width:72px;height:72px;background:var(--green-dim);border:2px solid rgba(26,224,90,0.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 28px;animation:popIn 0.5s both;}
+@keyframes popIn{from{opacity:0;transform:scale(0.4);}to{opacity:1;transform:scale(1);}}
+.ty-h1{font-family:'Instrument Serif',serif;font-size:clamp(30px,5vw,52px);font-weight:400;line-height:1.1;margin-bottom:18px;}
+.ty-sub{font-size:16px;color:var(--muted);max-width:460px;line-height:1.7;margin-bottom:40px;}
+.ty-whatsapp{display:inline-flex;align-items:center;gap:12px;background:#25D366;color:#fff;font-family:'Satoshi',sans-serif;font-size:17px;font-weight:700;padding:17px 36px;border-radius:50px;text-decoration:none;animation:ctapulse 2.5s infinite;}
+
+/* TOAST (NOTIFICAÇÃO) */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--green);color:#060906;padding:13px 24px;border-radius:50px;font-size:14px;font-weight:700;z-index:999;opacity:0;transition:all 0.35s;}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+
+@media(max-width:720px){
+  nav{padding:16px 20px;}
+  .features-grid{grid-template-columns:1fr;}
+  .stats-strip{flex-direction:column;}
+}
+</style>
+</head>
+<body>
+
+<div id="page-landing" class="page active">
+  <nav>
+    <div class="logo"><div class="logo-icon">⚡</div>Pay<span>Flux</span></div>
+    <div class="nav-tag">🔴 Vagas limitadas — 30 designers</div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-badge"><span class="badge-dot"></span>Lista de espera aberta · Beta exclusivo</div>
+    <h1 class="hero-h1">Trabalhe com a certeza<br>absoluta de que vai <em>receber.</em></h1>
+    <p class="hero-sub">A PayFlux é a plataforma anti-calote feita sob medida para designers freelancers. Proteja seus projetos com escrow, contrato automático e gestão de etapas.</p>
+    <div class="hero-spots">🎯 Selecionando apenas 30 designers para o grupo piloto</div>
+    <button class="btn-cta" onclick="openModal()">Quero estar entre os 30 Designers <span class="btn-arrow">→</span></button>
+    <div class="stats-strip">
+      <div class="stat-item"><span class="stat-num">67%</span><span class="stat-label">já tomaram calote</span></div>
+      <div class="stat-item"><span class="stat-num">82%</span><span class="stat-label">querem garantia</span></div>
+      <div class="stat-item"><span class="stat-num">R$ 0</span><span class="stat-label">de inadimplência</span></div>
+    </div>
+  </section>
+
+  <section class="features-section">
+    <div class="section-eyebrow">Tudo que você precisa</div>
+    <h2 class="section-h2">Para receber com segurança.</h2>
+    <div class="features-grid">
+      <div class="feat-card"><div class="feat-icon">🔒</div><div class="feat-title">Proteção Escrow</div><div class="feat-desc">Os fundos ficam retidos com segurança até a aprovação.</div></div>
+      <div class="feat-card"><div class="feat-icon">📄</div><div class="feat-title">Contratos Automáticos</div><div class="feat-desc">Acordos legais gerados instantaneamente.</div></div>
+      <div class="feat-card"><div class="feat-icon">👁️</div><div class="feat-title">Proteção de Arquivos</div><div class="feat-desc">Prévias com marca d'água até o pagamento.</div></div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="cta-box">
+      <h2 class="cta-box-h2">Pare de perder dinheiro<br>com trabalho não pago.</h2>
+      <button class="btn-cta" onclick="openModal()">Começar Grátis <span class="btn-arrow">→</span></button>
+    </div>
+  </section>
+
+  <footer>
+    <div class="logo" style="font-size:16px;"><div class="logo-icon" style="width:22px;height:22px;font-size:11px;">⚡</div>Pay<span>Flux</span></div>
+    <div>© 2026 PayFlux. Proteja seu trabalho criativo.</div>
+  </footer>
+</div>
+
+<div id="page-thankyou" class="page">
+  <div class="ty-icon">✅</div>
+  <h1 class="ty-h1">Inscrição recebida!<br><em>Você está na lista.</em></h1>
+  <p class="ty-sub">As vagas para o grupo piloto são limitadas. Entre agora no nosso grupo fechado para garantir sua prioridade.</p>
+  <a class="ty-whatsapp" href="https://chat.whatsapp.com/InD6IXFdBUw98WfhkBb42z" target="_blank">
+    Entrar no Grupo dos Fundadores
+  </a>
+</div>
+
+<div class="modal-overlay" id="form-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="msi">
+      <div class="msi-dot active" id="dot-1"></div>
+      <div class="msi-dot" id="dot-2"></div>
+      <div class="msi-dot" id="dot-3"></div>
+      <div class="msi-dot" id="dot-4"></div>
+    </div>
+
+    <div id="step-1">
+      <div class="modal-title">Quase lá! 🎯</div>
+      <div class="modal-sub">Preencha seus dados para garantir sua vaga.</div>
+      <div class="form-group"><label class="form-label">Nome completo *</label><input class="form-input" type="text" id="f-nome" placeholder="Seu nome"></div>
+      <div class="form-group"><label class="form-label">E-mail *</label><input class="form-input" type="email" id="f-email" placeholder="seu@email.com"></div>
+      <button class="btn-submit" onclick="nextStep(2)">Continuar →</button>
+    </div>
+
+    <div id="step-2" style="display:none;">
+      <div class="modal-title">Seu portfólio 💼</div>
+      <div class="form-group"><label class="form-label">Link do portfólio ou LinkedIn *</label><input class="form-input" type="url" id="f-portfolio" placeholder="https://behance.net/seuusuario"></div>
+      <button class="btn-submit" onclick="nextStep(3)">Continuar →</button>
+    </div>
+
+    <div id="step-3" style="display:none;">
+      <div class="modal-title">A dor real 💸</div>
+      <div class="form-group"><label class="form-label">Qual seu maior prejuízo por calote? *</label><textarea class="form-textarea" id="f-calote" placeholder="Ex: Perdi R$ 3.000..."></textarea></div>
+      <button class="btn-submit" onclick="nextStep(4)">Continuar →</button>
+    </div>
+
+    <div id="step-4" style="display:none;">
+      <div class="modal-title">Última pergunta 🎉</div>
+      <div class="form-group">
+        <label class="form-label">Como prefere pagar a taxa da plataforma? *</label>
+        <select class="form-select" id="f-modelo">
+          <option value="">Selecione...</option>
+          <option value="Taxa fixa por projeto (R$20,00)">Taxa fixa por projeto (R$20,00)</option>
+          <option value="Porcentagem do valor (10%)">Porcentagem do valor (10%)</option>
+          <option value="Assinatura mensal fixa">Assinatura mensal fixa</option>
+        </select>
+      </div>
+      <button class="btn-submit" id="btn-final" onclick="submitForm()">✅ Garantir minha vaga agora</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// --- FUNÇÕES DE NAVEGAÇÃO ---
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const target = document.getElementById(id);
+  if (target) target.classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function openModal() {
+  document.getElementById('form-modal').classList.add('open');
+  goToStep(1);
+}
+
+function closeModal() {
+  document.getElementById('form-modal').classList.remove('open');
+}
+
+// --- CONTROLE DE STEPS DO FORM ---
+let currentStep = 1;
+function goToStep(n) {
+  for(let i=1; i<=4; i++){
+    const s = document.getElementById('step-'+i);
+    const d = document.getElementById('dot-'+i);
+    if(s) s.style.display = i===n ? 'block' : 'none';
+    if(d) d.classList.toggle('active', i<=n);
+  }
+  currentStep = n;
+}
+
+function nextStep(n) { if(validate(currentStep)) goToStep(n); }
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+function validate(n) {
+  const map = {1:['f-nome','f-email'], 2:['f-portfolio'], 3:['f-calote'], 4:['f-modelo']};
+  let ok = true;
+  (map[n]||[]).forEach(id => {
+    const el = document.getElementById(id);
+    if(el && !el.value.trim()){
+      el.style.borderColor='#FF5A3C';
+      setTimeout(()=>el.style.borderColor='', 2000);
+      ok = false;
+    }
+  });
+  return ok;
+}
+
+// --- ENVIO PARA FORMSPREE ---
+async function submitForm() {
+  if(!validate(4)) return;
+  const btn = document.getElementById('btn-final');
+  btn.disabled = true;
+  btn.textContent = 'Enviando...';
+
+  const data = {
+    nome: document.getElementById('f-nome').value,
+    email: document.getElementById('f-email').value,
+    portfolio: document.getElementById('f-portfolio').value,
+    prejuizo: document.getElementById('f-calote').value,
+    modelo: document.getElementById('f-modelo').value
+  };
+
+  try {
+    const response = await fetch('https://formspree.io/f/xykvkwea', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(data)
+    });
+
+    if (response.ok) {
+      showToast('Sucesso! Redirecionando...');
+      setTimeout(() => {
+        closeModal();
+        showPage('page-thankyou');
+      }, 1500);
+    } else {
+      throw new Error();
+    }
+  } catch {
+    showToast('Erro ao enviar. Tente novamente.');
+    btn.disabled = false;
+    btn.textContent = '✅ Garantir minha vaga agora';
+  }
+}
+</script>
+
+</body>
+</html>
